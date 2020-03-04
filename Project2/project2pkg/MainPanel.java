@@ -59,7 +59,7 @@ public class MainPanel extends JPanel {
 
 		JLabel lblPatientStr = new JLabel(myPats.getPatient("1").toString());
 		lblPatientStr.setBackground(Color.WHITE);
-		lblPatientStr.setBounds(26, 71, 291, 14);
+		lblPatientStr.setBounds(26, 71, 334, 14);
 		add(lblPatientStr);
 
 		JComboBox comboBox = new JComboBox(myPats.getIds().toArray());
@@ -87,6 +87,11 @@ public class MainPanel extends JPanel {
 		lblErrorLabel.setForeground(Color.RED);
 		lblErrorLabel.setBounds(26, 121, 151, 22);
 		add(lblErrorLabel);
+		
+		JLabel lblImg = new JLabel("img");
+		lblImg.setIcon(new ImageIcon("./syringe.png"));
+		lblImg.setBounds(203, 109, 128, 128);
+		add(lblImg);
 		
 		JButton btnSetResult = new JButton("Set Result");
 		btnSetResult.addActionListener(new ActionListener() {
@@ -120,7 +125,7 @@ public class MainPanel extends JPanel {
 				
 				class PatientPanel extends JPanel{
 					public PatientPanel() {
-						setPreferredSize(new Dimension(375, 280));
+						setPreferredSize(new Dimension(390, 280));
 						setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 						setBackground(Color.LIGHT_GRAY);
 						setLayout(null);
@@ -128,7 +133,7 @@ public class MainPanel extends JPanel {
 						JTextPane textPane = new JTextPane();
 						textPane.setText(myPats.toString());
 						JScrollPane jsp = new JScrollPane(textPane);
-						jsp.setBounds(10, 11, 355, 258);
+						jsp.setBounds(10, 11, 370, 258);
 						frame.getContentPane().add(jsp);
 					}
 				}
@@ -201,6 +206,7 @@ public class MainPanel extends JPanel {
 				lblPatientInterface.setForeground(Color.GREEN);
 				lblPatientStr.setForeground(Color.GREEN);
 				lblPatientInfo.setForeground(Color.GREEN);
+				lblImg.setIcon(new ImageIcon("./party.gif"));
 				rdbtnCr.setBackground(Color.MAGENTA);
 				rdbtnDp.setBackground(Color.MAGENTA);
 
@@ -220,6 +226,7 @@ public class MainPanel extends JPanel {
 				lblPatientInterface.setForeground(Color.BLACK);
 				lblPatientStr.setForeground(Color.BLACK);
 				lblPatientInfo.setForeground(Color.BLACK);
+				lblImg.setIcon(new ImageIcon("./syringe.png"));
 				rdbtnCr.setBackground(Color.LIGHT_GRAY);
 				rdbtnDp.setBackground(Color.LIGHT_GRAY);
 
@@ -227,10 +234,6 @@ public class MainPanel extends JPanel {
 		});
 		menu.add(mntmBoringModeVv);
 		
-		JLabel lblImg = new JLabel("img");
-		lblImg.setIcon(new ImageIcon("./syringe.png"));
-		lblImg.setBounds(203, 109, 128, 128);
-		add(lblImg);
 		
 	}
 	
