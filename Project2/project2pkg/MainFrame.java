@@ -1,6 +1,8 @@
 package project2pkg;
 
 import java.awt.Component;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
@@ -19,7 +21,13 @@ public class MainFrame {
 		frame.getContentPane().add(panel);
 		
 		frame.pack();
+		frame.setResizable(false);
 		frame.setVisible(true);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent we) {
+				panel.doClose();
+			}
+		});
 	}
 
 }

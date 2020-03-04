@@ -15,40 +15,51 @@ import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+
 
 import project1.*;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.border.EtchedBorder;
+import javax.swing.ImageIcon;
 
 public class MainPanel extends JPanel {
-	PatientCollection myPats = new PatientCollection();
+	PatientCollection myPats = new PatientCollection("./data.csv");
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	public MainPanel() {
-		setPreferredSize(new Dimension(400, 300));
+		setPreferredSize(new Dimension(370, 300));
 		setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		
 		
-		JLabel lblPatients = new JLabel("Patient(s)");
-		lblPatients.setBounds(26, 36, 56, 14);
+		JLabel lblPatients = new JLabel("Patient:");
+		lblPatients.setBounds(26, 96, 56, 14);
 		add(lblPatients);
 		
 		JLabel lblPatientInterface = new JLabel("Patient Interface");
 		lblPatientInterface.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
-		lblPatientInterface.setBounds(153, 11, 114, 14);
+		lblPatientInterface.setBounds(121, 25, 114, 14);
 		add(lblPatientInterface);
 		
 		JLabel lblPatientInfo = new JLabel("Patient Info");
 		lblPatientInfo.setFont(lblPatientInfo.getFont().deriveFont(lblPatientInfo.getFont().getStyle() | Font.BOLD));
-		lblPatientInfo.setBounds(26, 104, 67, 14);
+		lblPatientInfo.setBounds(26, 46, 67, 14);
 		add(lblPatientInfo);
 
 		JLabel lblPatientStr = new JLabel(myPats.getPatient("1").toString());
 		lblPatientStr.setBackground(Color.WHITE);
-		lblPatientStr.setBounds(26, 129, 291, 14);
+		lblPatientStr.setBounds(26, 71, 291, 14);
 		add(lblPatientStr);
 
 		JComboBox comboBox = new JComboBox(myPats.getIds().toArray());
@@ -57,24 +68,24 @@ public class MainPanel extends JPanel {
 				lblPatientStr.setText(myPats.getPatient(comboBox.getSelectedItem().toString()).toString());
 			}
 		});
-		comboBox.setBounds(26, 61, 42, 22);
+		comboBox.setBounds(78, 92, 42, 22);
 		add(comboBox);
 		
 		JRadioButton rdbtnCr = new JRadioButton("CR");
 		buttonGroup.add(rdbtnCr);
 		rdbtnCr.setBackground(Color.LIGHT_GRAY);
-		rdbtnCr.setBounds(26, 177, 56, 23);
+		rdbtnCr.setBounds(26, 150, 56, 23);
 		add(rdbtnCr);
 		
 		JRadioButton rdbtnDp = new JRadioButton("DP");
 		buttonGroup.add(rdbtnDp);
 		rdbtnDp.setBackground(Color.LIGHT_GRAY);
-		rdbtnDp.setBounds(26, 203, 56, 23);
+		rdbtnDp.setBounds(26, 176, 56, 23);
 		add(rdbtnDp);
 		
 		JLabel lblErrorLabel = new JLabel("");
 		lblErrorLabel.setForeground(Color.RED);
-		lblErrorLabel.setBounds(26, 154, 151, 22);
+		lblErrorLabel.setBounds(26, 121, 151, 22);
 		add(lblErrorLabel);
 		
 		JButton btnSetResult = new JButton("Set Result");
@@ -98,7 +109,7 @@ public class MainPanel extends JPanel {
 				}
 			}
 		});
-		btnSetResult.setBounds(88, 191, 89, 23);
+		btnSetResult.setBounds(88, 165, 99, 23);
 		add(btnSetResult);
 		
 		JButton btnShowAllPatients = new JButton("Show All Patients");
@@ -123,13 +134,107 @@ public class MainPanel extends JPanel {
 				}
 				PatientPanel panel = new PatientPanel();
 				frame.getContentPane().add(panel);
-				frame.setResizable(false);`
+				frame.setResizable(false);
 				frame.pack();
 				frame.setVisible(true);
 			}
 		});
-		btnShowAllPatients.setBounds(28, 266, 124, 23);
+		btnShowAllPatients.setBounds(28, 266, 149, 23);
 		add(btnShowAllPatients);
 		
+		JButton btnRemovePatient = new JButton("Remove Patient");
+		btnRemovePatient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String pat = new String(comboBox.getSelectedItem().toString());
+				if (JOptionPane.showOptionDialog(null, "Are you sure you want to delete patient " 
+						+ comboBox.getSelectedItem().toString() +"?", "Confirm", JOptionPane.YES_NO_OPTION, 
+						JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+					myPats.removePatient(pat);
+				}
+			}
+		});
+		btnRemovePatient.setBounds(190, 266, 149, 23);
+		add(btnRemovePatient);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 370, 22);
+		add(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+		
+		JMenuItem mntmImportPatients = new JMenuItem("Import Patients");
+		mntmImportPatients.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JFileChooser jfc = new JFileChooser("./");
+				int rv = jfc.showOpenDialog(null);
+				if(rv == JFileChooser.APPROVE_OPTION) {
+					String SelectedFile = jfc.getSelectedFile().toString();
+					myPats.addPatientsFromFile(SelectedFile);
+				}
+				comboBox.setModel(new DefaultComboBoxModel(myPats.getIds().toArray()));
+			}
+		});
+		mnFile.add(mntmImportPatients);
+		
+		JMenuItem mntmSave = new JMenuItem(" Save Patient File");
+		mntmSave.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				myPats.doWrite("./textwrie.csv");
+			}
+		});
+		mnFile.add(mntmSave);
+		
+		JMenu menu = new JMenu("( \u0361\u00B0 \u035C\u0296 \u0361\u00B0)");
+		menuBar.add(menu);
+		
+		JMenuItem mntmPAR = new JMenuItem("P A R T Y  M O D E");
+		mntmPAR.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setBorder(new EtchedBorder(EtchedBorder.RAISED, Color.GREEN, Color.CYAN));
+				setBackground(Color.MAGENTA);
+				lblErrorLabel.setForeground(Color.BLUE);
+				lblPatients.setForeground(Color.GREEN);
+				lblPatientInterface.setForeground(Color.GREEN);
+				lblPatientStr.setForeground(Color.GREEN);
+				lblPatientInfo.setForeground(Color.GREEN);
+				rdbtnCr.setBackground(Color.MAGENTA);
+				rdbtnDp.setBackground(Color.MAGENTA);
+
+
+			}
+		});
+		menu.add(mntmPAR);
+		
+		JMenuItem mntmBoringModeVv = new JMenuItem("Boring mode v_v");
+		mntmBoringModeVv.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+				setBackground(Color.LIGHT_GRAY);
+				lblErrorLabel.setForeground(Color.BLACK);
+				lblPatients.setForeground(Color.BLACK);
+				lblPatientInterface.setForeground(Color.BLACK);
+				lblPatientStr.setForeground(Color.BLACK);
+				lblPatientInfo.setForeground(Color.BLACK);
+				rdbtnCr.setBackground(Color.LIGHT_GRAY);
+				rdbtnDp.setBackground(Color.LIGHT_GRAY);
+
+			}
+		});
+		menu.add(mntmBoringModeVv);
+		
+		JLabel lblImg = new JLabel("img");
+		lblImg.setIcon(new ImageIcon("./syringe.png"));
+		lblImg.setBounds(203, 109, 128, 128);
+		add(lblImg);
+		
+	}
+	
+	public void doClose() {
+		myPats.doWrite("./textwrie.csv");
 	}
 }
