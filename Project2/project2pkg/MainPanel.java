@@ -16,7 +16,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
