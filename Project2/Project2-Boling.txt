@@ -1,0 +1,24 @@
+/* Taylor Boling, CSCI 3381 Project 2
+ * This project serves to be the continuation of Project one, and to teach the implementation of GUIs
+ */
+ 
+ FOR ALL CODE DESCRIPTION AND FURTHER ELABORATION ON SPECIFIC CODE, SEE THE SOURCE CODE
+ 
+ Public class MainFrame {
+ 
+	main() //creates a Jframe and adds a JPanel to it
+	}
+
+ Public Class MainPanel {
+
+	MainPanel() //organizes the panel for the usage as well as implements functionality
+	}
+	
+ Class PatientPanel{
+	
+	PatientPanel() //creates a panel for displaying all patients
+	}
+	
+ 
+
+	
