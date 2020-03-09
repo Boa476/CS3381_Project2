@@ -1,3 +1,7 @@
+/* Taylor Boling, CSCI 3381 Project 2
+ * This project serves to be the continuation of Project one, and to teach the implementation of GUIs
+ */
+
 package project2pkg;
 
 import java.awt.Color;
@@ -35,13 +39,13 @@ public class MainPanel extends JPanel {
 	PatientCollection myPats = new PatientCollection("./data.csv");
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
-	public MainPanel() {
-		setPreferredSize(new Dimension(370, 300));
+	public MainPanel() { //organizes the panel for the usage as well as implements functionality
+		setPreferredSize(new Dimension(370, 300)); // implements the base panel characteristics
 		setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		
-		
+		//for convenience of reading, all labels are placed together
 		JLabel lblPatients = new JLabel("Patient:");
 		lblPatients.setBounds(26, 96, 56, 14);
 		add(lblPatients);
@@ -61,9 +65,19 @@ public class MainPanel extends JPanel {
 		lblPatientStr.setBounds(26, 71, 334, 14);
 		add(lblPatientStr);
 
+		JLabel lblErrorLabel = new JLabel("");
+		lblErrorLabel.setForeground(Color.RED);
+		lblErrorLabel.setBounds(26, 121, 151, 22);
+		add(lblErrorLabel);
+		
+		JLabel lblImg = new JLabel("img");
+		lblImg.setIcon(new ImageIcon("./syringe.png"));
+		lblImg.setBounds(203, 109, 128, 128);
+		add(lblImg);
+		
 		JComboBox comboBox = new JComboBox(myPats.getIds().toArray());
 		comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) { //changes a label based on the combobox's selected item
 				lblPatientStr.setText(myPats.getPatient(comboBox.getSelectedItem().toString()).toString());
 			}
 		});
@@ -82,19 +96,9 @@ public class MainPanel extends JPanel {
 		rdbtnDp.setBounds(26, 176, 56, 23);
 		add(rdbtnDp);
 		
-		JLabel lblErrorLabel = new JLabel("");
-		lblErrorLabel.setForeground(Color.RED);
-		lblErrorLabel.setBounds(26, 121, 151, 22);
-		add(lblErrorLabel);
-		
-		JLabel lblImg = new JLabel("img");
-		lblImg.setIcon(new ImageIcon("./syringe.png"));
-		lblImg.setBounds(203, 109, 128, 128);
-		add(lblImg);
-		
 		JButton btnSetResult = new JButton("Set Result");
 		btnSetResult.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {// sets patient result based on the radio button selected
 				if (buttonGroup.isSelected(rdbtnCr.getModel())) {
 					myPats.getPatient(comboBox.getSelectedItem().toString()).setResult("CR");
 					lblPatientStr.setText(myPats.getPatient(comboBox.getSelectedItem().toString()).toString());
@@ -117,10 +121,10 @@ public class MainPanel extends JPanel {
 		add(btnSetResult);
 		
 		JButton btnShowAllPatients = new JButton("Show All Patients");
-		btnShowAllPatients.addActionListener(new ActionListener() {
+		btnShowAllPatients.addActionListener(new ActionListener() { //creates a new frame and panel to display all patients
 			public void actionPerformed(ActionEvent e) {
 				JFrame frame = new JFrame("Patient List");
-				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //gets rid of the window on close, rather than exiting the program
 				
 				class PatientPanel extends JPanel{
 					public PatientPanel() {
@@ -131,7 +135,9 @@ public class MainPanel extends JPanel {
 						
 						JTextPane textPane = new JTextPane();
 						textPane.setText(myPats.toString());
-						JScrollPane jsp = new JScrollPane(textPane);
+						// in retrospect, it would've probably been easier to just do a textArea, and it would have given me points on the rubric.
+						// but oh well! live and learn?
+						JScrollPane jsp = new JScrollPane(textPane); 
 						jsp.setBounds(10, 11, 370, 258);
 						frame.getContentPane().add(jsp);
 					}
@@ -147,7 +153,7 @@ public class MainPanel extends JPanel {
 		add(btnShowAllPatients);
 		
 		JButton btnRemovePatient = new JButton("Remove Patient");
-		btnRemovePatient.addActionListener(new ActionListener() {
+		btnRemovePatient.addActionListener(new ActionListener() { // removes patient based on the combo box's selected item
 			public void actionPerformed(ActionEvent e) {
 				String pat = new String(comboBox.getSelectedItem().toString());
 				if (JOptionPane.showOptionDialog(null, "Are you sure you want to delete patient " 
@@ -168,7 +174,7 @@ public class MainPanel extends JPanel {
 		menuBar.add(mnFile);
 		
 		JMenuItem mntmImportPatients = new JMenuItem("Import Patients");
-		mntmImportPatients.addMouseListener(new MouseAdapter() {
+		mntmImportPatients.addMouseListener(new MouseAdapter() { // implements importing patients to the patient collection
 			@Override
 			public void mousePressed(MouseEvent e) {
 				JFileChooser jfc = new JFileChooser("./");
@@ -183,21 +189,21 @@ public class MainPanel extends JPanel {
 		mnFile.add(mntmImportPatients);
 		
 		JMenuItem mntmSave = new JMenuItem(" Save Patient File");
-		mntmSave.addMouseListener(new MouseAdapter() {
+		mntmSave.addMouseListener(new MouseAdapter() { //writes to file without closing
 			@Override
 			public void mousePressed(MouseEvent e) {
-				myPats.doWrite("./textwrie.csv");
+				myPats.doWrite("./data.csv");
 			}
 		});
 		mnFile.add(mntmSave);
 		
-		JMenu menu = new JMenu("( \u0361\u00B0 \u035C\u0296 \u0361\u00B0)");
+		JMenu menu = new JMenu("( \u0361\u00B0 \u035C\u0296 \u0361\u00B0)"); //Those are some nice character codes!
 		menuBar.add(menu);
 		
 		JMenuItem mntmPAR = new JMenuItem("P A R T Y  M O D E");
 		mntmPAR.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent e) { // Implements the best layout for using this program
 				setBorder(new EtchedBorder(EtchedBorder.RAISED, Color.GREEN, Color.CYAN));
 				setBackground(Color.MAGENTA);
 				lblErrorLabel.setForeground(Color.BLUE);
@@ -215,7 +221,7 @@ public class MainPanel extends JPanel {
 		menu.add(mntmPAR);
 		
 		JMenuItem mntmBoringModeVv = new JMenuItem("Boring mode v_v");
-		mntmBoringModeVv.addMouseListener(new MouseAdapter() {
+		mntmBoringModeVv.addMouseListener(new MouseAdapter() { // Implements the "appropriate" original layout for this project
 			@Override
 			public void mousePressed(MouseEvent e) {
 				setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -237,6 +243,6 @@ public class MainPanel extends JPanel {
 	}
 	
 	public void doClose() {
-		myPats.doWrite("./textwrie.csv");
+		myPats.doWrite("./data.csv");
 	}
 }

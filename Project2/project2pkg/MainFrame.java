@@ -1,3 +1,7 @@
+/* Taylor Boling, CSCI 3381 Project 2
+ * This project serves to be the continuation of Project one, and to teach the implementation of GUIs
+*/
+
 package project2pkg;
 
 import java.awt.event.WindowAdapter;
@@ -7,7 +11,7 @@ import javax.swing.JFrame;
 
 public class MainFrame {
 
-	public MainFrame() {
+	public MainFrame() { //creates a Jframe and adds a JPanel to it
 		// TODO Auto-generated constructor stub
 	}
 
